@@ -3,15 +3,14 @@ import jenkins.model.*
 import java.io.*
 import java.util.Collections
 
-
 def j = Jenkins.getInstance()
 
 def k = new KubernetesCloud(
   'kubernetes',
   null,
-  'https://192.168.100.10:6443',
+  env['KUBERNETES_MASTER'],
   'default',
-  'http://192.168.100.20:8080/',
+  env['JENKINS_ADDRESS'],
   '10', 0, 0, 5
 )
 k.setServerCertificate(new File('/var/lib/jenkins/kubernetes-ca.crt').text)

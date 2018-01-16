@@ -1,4 +1,5 @@
 ---
+# yamllint disable rule:truthy
 # tasks file for jenkins
 - name: create yum repo
   yum_repository:
@@ -50,6 +51,17 @@
     src: /tmp/kubernetes-ca.crt
     owner: jenkins
     group: jenkins
+
+- name: add jenkins sysconfig settings
+  lineinfile:
+    path: /etc/sysconfig/jenkins
+    line: "{{ item.name}}={{ item.value }}"
+    regexp: "^{{ item.name }}.*"
+  with_items:
+    # yamllint disable rule:line-length
+    - {name: JENKINS_ADDRESS, value: "http://{{ ansible_default_ipv4.address }}:8080"}
+    - {name: KUBERNETES_MASTER, value: "https://{{ groups['masters'][0].ipv4.address}}:6443"}
+    # yamllint enable rule:line-length
 
 # Init.groovy.d
 - name: copy init.groovy.d scripts
