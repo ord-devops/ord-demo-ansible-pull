@@ -12,8 +12,8 @@
           - "{{ ansible_ec2_instance_id }}"
       register: instances
     - set_fact: 
-        role: instances.instances[0].tags.role
+        instance_role: "{{ instances.instances[0].tags.role }}"
 
   roles:
     - instance
-    - "{{ role }}"
+    - "{{ instance_role }}"
