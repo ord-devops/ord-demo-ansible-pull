@@ -17,6 +17,10 @@
     - instance
     
   tasks:
+    - debug:
+        var: instance_role
+    - debug:
+        var: hostvars[inventory_hostname]
     - name: run instance role
       include_role: 
         name: "{{ hostvars[inventory_hostname].instance_role }}"
