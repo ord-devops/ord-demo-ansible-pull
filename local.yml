@@ -11,12 +11,10 @@
         instance_ids:
           - "{{ ansible_ec2_instance_id }}"
       register: instances
-    - set_fact: 
-        instance_role: "{{ instances.instances[0].tags.role }}"
   roles:
     - instance
     
-  post_tasks:
+  tasks:
     - name: run instance role
-      import_role: 
-        name: "{{ instance_role }}"
+      include_role: 
+        name: "{{ instances.instances[0].tags.role }}"
