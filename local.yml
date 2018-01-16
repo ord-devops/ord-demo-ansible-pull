@@ -13,7 +13,10 @@
       register: instances
     - set_fact: 
         instance_role: "{{ instances.instances[0].tags.role }}"
-
   roles:
     - instance
-    - "{{ instance_role }}"
+    
+  post_tasks:
+    - name: run instance role
+      import_role: 
+        name: "{{ instance_role }}"
