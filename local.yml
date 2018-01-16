@@ -14,7 +14,7 @@
   roles:
     - instance
     
-  tasks:
+  post_tasks:
     - name: run instance role
       include_role: 
-        name: "{{ instances.instances[0].tags.role }}"
+        name: "{{ hostvars[inventory_hostname].instances.instances[0].tags.role }}"
