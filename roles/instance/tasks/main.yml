@@ -1,0 +1,6 @@
+---
+# tasks file for instance
+
+- name: Set timezone to CET
+  timezone:
+    name: Europe/Amsterdam
