@@ -1,4 +1,19 @@
 ---
 - hosts: localhost
+  pre_tasks:
+    - name: install boto 3
+      pip:
+        name: boto3
+    - name: get instance metadata
+      ec2_metadata_facts:
+    - name: get instance facts
+      ec2_instance_facts:
+        instance_ids:
+          - "{{ ansible_ec2_instance_id }}"
+      register: instances
+    - set_fact: 
+        role: instances.instances[0].tags.role
+
   roles:
     - instance
+    - "{{ role }}"
