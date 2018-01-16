@@ -1,0 +1,45 @@
+---
+- name: generate token
+  command: kubeadm token generate
+  register: kube_token_generate
+
+- name: set token fact
+  set_fact:
+    kubeadm_token: "{{ kube_token_generate.stdout }}"
+
+- name: perform kubeadm init
+  command: kubeadm init \
+             --token={{ kubeadm_token }}
+             --apiserver-advertise-address={{ k8sMasterAddress }}
+             --pod-network-cidr={{ k8s_podCidr }}
+             --service-cidr={{ k8s_ServiceCidr }}
+  args:
+    creates: /etc/kubernetes/admin.conf
+  register: kubeadm_init
+
+- name: create .kube
+  file:
+    path: /root/.kube
+    state: directory
+
+- name: copy admin.conf
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /root/.kube/config
+    remote_src: true
+
+- name: make sure kubelet is running
+  systemd:
+    name: kubelet
+    state: started
+
+- name: generate join command for later use
+  register: print_join_command
+  command: kubeadm token create --print-join-command
+
+- name: set fact for join command
+  set_fact:
+    join_command: "{{ print_join_command.stdout }}"
+
+- name: add pod network
+  shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.IPALLOC_RANGE={{ k8s_podCidr }}"

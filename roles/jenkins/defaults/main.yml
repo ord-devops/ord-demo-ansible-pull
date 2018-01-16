@@ -1,2 +1,3 @@
 ---
 # defaults file for jenkins
+csr_name: jenkins

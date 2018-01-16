@@ -1,0 +1,79 @@
+---
+# vim: ft=ansible
+# tasks file for kubeadm
+#
+    - name: install kubernetes repo
+      copy:
+        src: kubernetes.repo
+        dest: /etc/yum.repos.d/kubernetes.repo
+
+    - name: load key
+      command: yum -y makecache --disablerepo=* --enablerepo=kubernetes
+
+    - name: install docker and kubelet and kubeadm
+      yum:
+        state: installed
+        name:
+          - docker
+          - kubelet
+          - kubeadm
+          - glusterfs-fuse
+
+    - name: allow gluster mounts in containers
+      seboolean:
+        name: virt_sandbox_use_fusefs
+        state: yes
+        persistent: yes
+
+    - name: load kernel modules
+      modprobe:
+        state: present
+        name: "{{ item }}"
+      with_items:
+        - dm_snapshot
+        - dm_thin_pool
+        - dm_mirror
+
+    - name: persist load modules
+      copy:
+        content:
+          dm_snapshot
+          dm_thin_pool
+          dm_mirror
+        dest: /etc/modules-load.d/glusterfs.conf
+
+    - systemd:
+        enabled: true
+        name: "{{ item }}"
+        state: started
+      with_items:
+        - docker
+        - kubelet
+    - name: setenforce 0
+      command: setenforce 0
+
+    - name: configure selinux mode
+      selinux:
+        state: permissive
+        policy: targeted
+
+    - name: disable swap
+      command: swapoff --all
+
+    - name: swap - remove current swaps from fstab
+      lineinfile:
+        dest: /etc/fstab
+        regexp: '^/[\S]+\s+none\s+swap '
+        state: absent
+
+    - name: k8s.conf sysctl
+      copy:
+        dest: /etc/sysctl.d/k8s.conf
+        content: |
+          net.bridge.bridge-nf-call-ip6tables = 1
+          net.bridge.bridge-nf-call-iptables = 1
+      register: sysctl_k8s
+
+    - name: k8s_sysctl load
+      command: sysctl -p /etc/sysctl.d/k8s.conf
+      when: sysctl_k8s.changed
