@@ -16,11 +16,15 @@
   roles:
     - instance
     
-  tasks:
+  post_tasks:
     - debug:
         var: instance_role
-    - debug:
-        var: hostvars[inventory_hostname]
-    - name: run instance role
+    - name: run jumphost role
       include_role: 
-        name: "{{ hostvars[inventory_hostname].instance_role }}"
+        name: jumphost
+      when: instance_role == 'jumphost'
+    - name: run k8smaster role
+      include_role: 
+        name: k8smaster
+      when: instance_role == 'k8smaster'
+
