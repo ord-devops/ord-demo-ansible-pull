@@ -15,7 +15,6 @@
   pre_tasks:
     name: import common k8s vars
     import_vars: vars/common.yml
-  hosts:
   become: true
   hosts:
     - k8snode
