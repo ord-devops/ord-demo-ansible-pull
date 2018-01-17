@@ -1,4 +1,10 @@
+---
+# yamllint disable rule:truthy
+#
 - name: init master
+  pre_tasks:
+    name: import common k8s vars
+    import_vars: vars/common.yml
   hosts:
     - "{{ groups['k8smaster'][0] }}"
   roles:
@@ -6,6 +12,10 @@
   become: yes
 
 - name: join nodes
+  pre_tasks:
+    name: import common k8s vars
+    import_vars: vars/common.yml
+  hosts:
   become: true
   hosts:
     - k8snode
