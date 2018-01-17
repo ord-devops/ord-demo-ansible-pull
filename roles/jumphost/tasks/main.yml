@@ -3,17 +3,17 @@
 
 - name: Get centos private key from s3
   aws_s3:
-    bucket: {{ keystore }}
-    object: {{ private_keyfile }}
-    dest: {{ instance_user_home }}/.ssh/id_rsa
+    bucket: "{{ keystore }}"
+    object: "{{ private_keyfile }}"
+    dest: "{{ instance_user_home }}/.ssh/id_rsa"
     mode: get
 
 - name: Set permissions on private key
   file:
-    path: {{ instance_user_home }}/.ssh/id_rsa
-    owner: {{ instance_user }}
+    path: "{{ instance_user_home }}/.ssh/id_rsa"
+    owner: "{{ instance_user }}"
     mode: 0600
-    group: {{ instance_user }}
+    group: "{{ instance_user }}"
 
 - name: get instance facts
   ec2_instance_facts:
