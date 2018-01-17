@@ -1,0 +1,20 @@
+- name: init master
+  hosts:
+    - "{{ groups['k8smaster'][0] }}"
+  roles:
+    - k8smaster
+  become: yes
+
+- name: join nodes
+  become: true
+  hosts:
+    - k8snode
+  roles:
+    - k8snode
+
+- name: jenkins
+  become: true
+  hosts:
+    - jenkins
+  roles:
+    - jenkins
