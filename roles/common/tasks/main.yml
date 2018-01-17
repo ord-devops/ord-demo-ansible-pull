@@ -1,6 +1,8 @@
 ---
-# tasks file for instance
+# tasks file for common
 
 - name: Set timezone to CET
   command: timedatectl set-timezone Europe/Amsterdam
   when: ansible_distribution=="CentOS"
+
+

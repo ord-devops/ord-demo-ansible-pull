@@ -1,2 +1,7 @@
 ---
 # defaults file for jumphost
+
+instance_user_home: /home/centos
+instance_user: centos
+private_keyfile: centos_rsa
+keystore: ord-demo-keystore

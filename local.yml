@@ -14,7 +14,7 @@
     - set_fact: 
          instance_role: "{{ instances.instances[0].tags.role }}"
   roles:
-    - instance
+    - common
     
   post_tasks:
     - debug:
@@ -27,4 +27,7 @@
       include_role: 
         name: k8smaster
       when: instance_role == 'k8smaster'
+
+
+
 
