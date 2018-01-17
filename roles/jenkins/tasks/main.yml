@@ -60,7 +60,7 @@
   with_items:
     # yamllint disable rule:line-length
     - {name: JENKINS_ADDRESS, value: "http://{{ ansible_default_ipv4.address }}:8080"}
-    - {name: KUBERNETES_MASTER, value: "https://{{ groups['k8smaster'][0].ansible_default_ipv4.address}}:6443"}
+    - {name: KUBERNETES_MASTER, value: "https://{{ hostvars[groups['k8smaster'][0]].ansible_default_ipv4.address}}:6443"}
     # yamllint enable rule:line-length
 
 # Init.groovy.d
