@@ -24,4 +24,4 @@
         name: jumphost
       when: instance_role == 'jumphost'
 
-- include_playbook: setup-cluster.yml
+- import_playbook: setup-cluster.yml
