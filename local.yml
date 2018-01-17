@@ -11,23 +11,22 @@
         instance_ids:
           - "{{ ansible_ec2_instance_id }}"
       register: instances
-    - set_fact: 
-         instance_role: "{{ instances.instances[0].tags.role }}"
+    - set_fact:
+        instance_role: "{{ instances.instances[0].tags.role }}"
   roles:
     - common
-    
+
   post_tasks:
     - debug:
         var: instance_role
     - name: run jumphost role
-      include_role: 
+      include_role:
         name: jumphost
       when: instance_role == 'jumphost'
     - name: run k8smaster role
-      include_role: 
+      include_role:
         name: k8smaster
       when: instance_role == 'k8smaster'
 
-
-
-
+- import_playbook: setup-cluster.yml
+  when: instance_role == 'jumphost'

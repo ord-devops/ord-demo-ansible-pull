@@ -27,7 +27,7 @@
     src: /etc/kubernetes/pki/jenkins.pfx
     dest: /tmp/jenkins.pfx
     flat: yes
-  delegate_to: "{{ groups['masters'][0] }}"
+  delegate_to: "{{ groups['k8smaster'][0] }}"
   register: jenkins_cert
 
 - name:
@@ -35,7 +35,7 @@
     src: /etc/kubernetes/pki/ca.crt
     dest: /tmp/kubernetes-ca.crt
     flat: yes
-  delegate_to: "{{ groups['masters'][0] }}"
+  delegate_to: "{{ groups['k8smaster'][0] }}"
 
 - name: write out pfx on jenkins server
   copy:
@@ -60,7 +60,7 @@
   with_items:
     # yamllint disable rule:line-length
     - {name: JENKINS_ADDRESS, value: "http://{{ ansible_default_ipv4.address }}:8080"}
-    - {name: KUBERNETES_MASTER, value: "https://{{ groups['masters'][0].ipv4.address}}:6443"}
+    - {name: KUBERNETES_MASTER, value: "https://{{ groups['k8smaster'][0].ipv4.address}}:6443"}
     # yamllint enable rule:line-length
 
 # Init.groovy.d
