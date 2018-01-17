@@ -23,10 +23,6 @@
       include_role: 
         name: jumphost
       when: instance_role == 'jumphost'
-    - name: run k8smaster role
-      include_role: 
-        name: k8smaster
-      when: instance_role == 'k8smaster'
 
 
 
