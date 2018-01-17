@@ -1,5 +1,6 @@
 ---
-- hosts: localhost
+- name: local instance configuration
+  hosts: localhost
   pre_tasks:
     - name: install boto 3
       pip:

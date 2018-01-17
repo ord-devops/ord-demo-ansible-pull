@@ -1,19 +1,33 @@
 ---
 # tasks file for jumphost
 
-- name: Get centos private key from s3
+- name: Get centos private key from s3 for {{ instance_user }}
   aws_s3:
     bucket: "{{ keystore }}"
     object: "{{ private_keyfile }}"
     dest: "{{ instance_user_home }}/.ssh/id_rsa"
     mode: get
 
-- name: Set permissions on private key
+- name: Set permissions on private key for {{ instance_user }}
   file:
     path: "{{ instance_user_home }}/.ssh/id_rsa"
     owner: "{{ instance_user }}"
     mode: 0600
     group: "{{ instance_user }}"
+
+- name: Get centos private key from s3 for {{ root_user }}
+  aws_s3:
+    bucket: "{{ keystore }}"
+    object: "{{ private_keyfile }}"
+    dest: "{{ root_user_home }}/.ssh/id_rsa"
+    mode: get
+
+- name: Set permissions on private key for {{ root_user }}
+  file:
+    path: "{{ root_user_home }}/.ssh/id_rsa"
+    owner: "{{ root_user }}"
+    mode: 0600
+    group: "{{ root_user }}"
 
 - name: get instance facts
   ec2_instance_facts:
