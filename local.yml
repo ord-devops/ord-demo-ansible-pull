@@ -25,4 +25,3 @@
       when: instance_role == 'jumphost'
 
 - include_playbook: setup-cluster.yml
-  when: instance_role == 'jumphost'
