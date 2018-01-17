@@ -1,0 +1,2 @@
+k8s_podCidr: 10.32.0.0/16
+k8s_serviceCidr: 10.254.0.0/16
