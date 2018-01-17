@@ -36,7 +36,7 @@
 - name: update inventory
   add_host:
     name: "{{ item.private_ip_address }}"
-    groups: "{{ item.tags.role }}"
+    groups: "{{ item.tags.role }}, all"
   with_items: "{{ instances.instances }}"
 
 
