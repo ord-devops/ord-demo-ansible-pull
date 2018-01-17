@@ -14,7 +14,7 @@
 
 - name: create a csr
   command: openssl req -new -batch -subj /CN=jenkins -key /etc/kubernetes/pki/jenkins.key -out /etc/kubernetes/pki/jenkins.csr
-  arges:
+  args:
     creates: /etc/kubernetes/pki/jenkins.csr
   delegate_to: "{{ groups['k8smaster'][0] }}"
 
