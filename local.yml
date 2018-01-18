@@ -20,9 +20,9 @@
   post_tasks:
     - debug:
         var: instance_role
-    - name: run jumphost role
+    - name: run jenkins role
       include_role:
         name: jumphost
-      when: instance_role == 'jumphost'
+      when: instance_role == 'jenkins'
 
 - import_playbook: setup-cluster.yml
