@@ -36,7 +36,7 @@
     group: jenkins
 
 - name: get token from s3
-  s3:
+  aws_s3:
     mode: get
     bucket: "{{ keystore }}"
     object: jenkins_github_token
