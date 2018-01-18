@@ -67,6 +67,19 @@
     state: absent
   changed_when: false
 
+- name: copy jenkins unit file
+  copy:
+    src: jenkins.service
+    dest: /etc/systemd/system/jenkins.service
+    owner: root
+    group: root
+    mode: 0644
+  register: reload_jenkins
+
+- name: reload systemd
+  command: systemctl daemon-reload
+  when: reload_jenkins.changed
+
 # Init.groovy.d
 - name: copy init.groovy.d scripts
   copy:
