@@ -57,7 +57,7 @@
     # yamllint disable rule:line-length
     - {name: JENKINS_ADDRESS, value: "http://{{ ansible_default_ipv4.address }}:8080"}
     - {name: JENKINS_GITHUB_TOKEN, value: "{{ jenkins_github_token.content | b64decode }}"}
-    - {name: JENKINS_ARGS, value: "-Djenkins.install.runSetupWizard=false"}
+    - {name: JENKINS_JAVA_OPTS, value: "-Djenkins.install.runSetupWizard=false"}
     - {name: KUBERNETES_MASTER, value: "https://{{ hostvars[groups['k8smaster'][0]].ansible_default_ipv4.address}}:6443"}
     # yamllint enable rule:line-length
 
