@@ -1,2 +1,6 @@
 ---
 # handlers file for kubeadm
+- name: restart kubelet
+  systemd:
+    name: kubelet
+    state: restarted

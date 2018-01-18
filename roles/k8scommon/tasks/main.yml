@@ -77,3 +77,16 @@
     - name: k8s_sysctl load
       command: sysctl -p /etc/sysctl.d/k8s.conf
       when: sysctl_k8s.changed
+
+    - name: ensure kubelet.service.d exists
+      file:
+        state: directory
+        path: /etc/systemd/system/kubelet.service.d
+
+    - name: setup kubelet cluster dns args
+      copy:
+        dest: /etc/systemd/system/kubelet.service.d/20-cluster-dns.conf
+        content: |
+          [Service]
+          Environment="KUBELET_DNS_ARGS=--cluster-dns=10.254.0.10 --cluster-domain=cluster.local"
+      notify: restart kubelet
