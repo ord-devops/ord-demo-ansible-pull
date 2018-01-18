@@ -8,9 +8,9 @@ def j = Jenkins.getInstance()
 def k = new KubernetesCloud(
   'kubernetes',
   null,
-  System.getEnv('KUBERNETES_MASTER'),
+  System.getenv('KUBERNETES_MASTER'),
   'default',
-  System.getEnv('JENKINS_ADDRESS'),
+  System.getenv('JENKINS_ADDRESS'),
   '10', 0, 0, 5
 )
 k.setServerCertificate(new File('/var/lib/jenkins/kubernetes-ca.crt').text)
