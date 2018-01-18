@@ -4,7 +4,7 @@ import com.cloudbees.plugins.credentials.domains.*
 import com.cloudbees.plugins.credentials.impl.*;
 
 String keyfile="/var/lib/jenkins/kubernetes.pfx"
-String password="jenkins"
+String password="Jenkins"
 
 // Kubernetes keypair
 def ksm1 = new CertificateCredentialsImpl.FileOnMasterKeyStoreSource(keyfile)
