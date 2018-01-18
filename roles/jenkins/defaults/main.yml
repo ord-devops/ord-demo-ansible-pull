@@ -1,6 +1,6 @@
 ---
 # defaults file for jumphost
-
+csr_name: jenkins
 instance_user_home: /home/centos
 instance_user: centos
 root_user_home: /root
