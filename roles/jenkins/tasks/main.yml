@@ -48,6 +48,10 @@
     groups: "{{ item.tags.role }}, all"
   with_items: "{{ instances.instances }}"
 
+- name: debug hosts
+  debug: 
+    msg: "{{ item }}"
+  with_items: "{{ groups['all'] }}"
 
 # tasks file for jenkins
 - name: create yum repo
