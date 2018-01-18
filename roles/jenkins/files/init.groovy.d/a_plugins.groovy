@@ -3,7 +3,7 @@ import java.util.logging.Logger
 def logger = Logger.getLogger("")
 def installed = false
 def initialized = false
-def pluginParameter="blueocean job-dsl-plugin kubernetes pipeline email-ext gradle ant ldap workflow-aggregator timestamper ws-cleanup"
+def pluginParameter="blueocean job-dsl kubernetes pipeline email-ext gradle ant ldap workflow-aggregator timestamper ws-cleanup"
 def plugins = pluginParameter.split()
 logger.info("" + plugins)
 def instance = Jenkins.getInstance()
