@@ -61,6 +61,7 @@
     - {name: KUBERNETES_MASTER, value: "https://{{ hostvars[groups['k8smaster'][0]].ansible_default_ipv4.address}}:6443"}
     - {name: JENKINS_LISTEN_ADDRESS, value: "0.0.0.0"}
     # yamllint enable rule:line-length
+  notify: restart jenkins
 
 - name: remove the file
   file:
