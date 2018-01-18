@@ -1,7 +1,9 @@
 ---
+# tasks for setting up jenkins
 # yamllint disable rule:truthy
 
-- include_tasks: kubernetes.yml
+- name: generate a kubernetes cert
+  include_tasks: kubernetes.yml
 
 - name: slurp pfx from master
   fetch:
@@ -33,6 +35,19 @@
     owner: jenkins
     group: jenkins
 
+- name: get token from s3
+  s3:
+    mode: get
+    bucket: "{{ keystore }}"
+    object: jenkins_github_token
+    dest: /tmp/jenkins_github_token
+  changed_when: false
+
+- name: slurp into variable
+  slurp:
+    src: /tmp/jenkins_github_token
+  register: jenkins_github_token
+
 - name: add jenkins sysconfig settings
   lineinfile:
     path: /etc/sysconfig/jenkins
@@ -41,10 +56,16 @@
   with_items:
     # yamllint disable rule:line-length
     - {name: JENKINS_ADDRESS, value: "http://{{ ansible_default_ipv4.address }}:8080"}
-    - {name: JENKINS_GITHUB_TOKEN, value: "{{ jenkins_github_token }}"
+    - {name: JENKINS_GITHUB_TOKEN, value: "{{ jenkins_github_token.content | b64decode }}"}
     - {name: JENKINS_ARGS, value: "-Djenkins.install.runSetupWizard=false"}
     - {name: KUBERNETES_MASTER, value: "https://{{ hostvars[groups['k8smaster'][0]].ansible_default_ipv4.address}}:6443"}
     # yamllint enable rule:line-length
+
+- name: remove the file
+  file:
+    path: /tmp/jenkins_github_token
+    state: absent
+  changed_when: false
 
 # Init.groovy.d
 - name: copy init.groovy.d scripts
