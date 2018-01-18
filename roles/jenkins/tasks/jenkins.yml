@@ -59,6 +59,7 @@
     - {name: JENKINS_GITHUB_TOKEN, value: "{{ jenkins_github_token.content | b64decode }}"}
     - {name: JENKINS_JAVA_OPTS, value: "-Djenkins.install.runSetupWizard=false"}
     - {name: KUBERNETES_MASTER, value: "https://{{ hostvars[groups['k8smaster'][0]].ansible_default_ipv4.address}}:6443"}
+    - {name: JENKINS_LISTEN_ADDRESS, value: "0.0.0.0"}
     # yamllint enable rule:line-length
 
 - name: remove the file
