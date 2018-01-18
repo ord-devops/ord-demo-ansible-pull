@@ -26,5 +26,8 @@
   become: true
   hosts:
     - jenkins
-  roles:
-    - jenkins
+  tasks:
+    - name: run jenkins role
+      import_role:
+        name: jenkins
+        tasks_from: jenkins

@@ -1,0 +1,62 @@
+---
+# yamllint disable rule:truthy
+
+- include_tasks: kubernetes.yml
+
+- name: slurp pfx from master
+  fetch:
+    src: /etc/kubernetes/pki/jenkins.pfx
+    dest: /tmp/jenkins.pfx
+    flat: yes
+  delegate_to: "{{ groups['k8smaster'][0] }}"
+  register: jenkins_cert
+
+- name:
+  fetch:
+    src: /etc/kubernetes/pki/ca.crt
+    dest: /tmp/kubernetes-ca.crt
+    flat: yes
+  delegate_to: "{{ groups['k8smaster'][0] }}"
+
+- name: write out pfx on jenkins server
+  copy:
+    dest: /var/lib/jenkins/kubernetes.pfx
+    src: /tmp/jenkins.pfx
+    remote_src: no
+    owner: jenkins
+    group: jenkins
+
+- name: write ca cert on jenkins
+  copy:
+    dest: /var/lib/jenkins/kubernetes-ca.crt
+    src: /tmp/kubernetes-ca.crt
+    owner: jenkins
+    group: jenkins
+
+- name: add jenkins sysconfig settings
+  lineinfile:
+    path: /etc/sysconfig/jenkins
+    line: "{{ item.name}}={{ item.value }}"
+    regexp: "^{{ item.name }}.*"
+  with_items:
+    # yamllint disable rule:line-length
+    - {name: JENKINS_ADDRESS, value: "http://{{ ansible_default_ipv4.address }}:8080"}
+    - {name: JENKINS_GITHUB_TOKEN, value: "{{ jenkins_github_token }}"
+    - {name: JENKINS_ARGS, value: "-Djenkins.install.runSetupWizard=false"}
+    - {name: KUBERNETES_MASTER, value: "https://{{ hostvars[groups['k8smaster'][0]].ansible_default_ipv4.address}}:6443"}
+    # yamllint enable rule:line-length
+
+# Init.groovy.d
+- name: copy init.groovy.d scripts
+  copy:
+    src: init.groovy.d/
+    dest: /var/lib/jenkins/init.groovy.d
+    owner: jenkins
+    group: jenkins
+  notify: restart jenkins
+
+- name: enable & start jenkins
+  systemd:
+    state: started
+    enabled: yes
+    name: jenkins

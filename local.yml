@@ -1,4 +1,6 @@
 ---
+# yamllint disable rule:truthy
+
 - name: local instance configuration
   hosts: localhost
   pre_tasks:
