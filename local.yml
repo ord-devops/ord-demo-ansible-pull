@@ -24,7 +24,7 @@
         var: instance_role
     - name: run jenkins role
       include_role:
-        name: jumphost
+        name: jenkins
       when: instance_role == 'jenkins'
 
 - import_playbook: setup-cluster.yml
