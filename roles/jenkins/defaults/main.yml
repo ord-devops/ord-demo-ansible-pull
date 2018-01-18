@@ -7,3 +7,4 @@ root_user_home: /root
 root_user: root
 private_keyfile: centos_rsa
 keystore: ord-demo-keystore
+jenkins_namespace: default

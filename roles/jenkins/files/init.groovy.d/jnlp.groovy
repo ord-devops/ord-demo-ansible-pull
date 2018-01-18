@@ -1,11 +1,12 @@
 import jenkins.model.Jenkins
+import jenkins.security.s2m.AdminWhitelistRule
 
 Jenkins j = Jenkins.instance
 
 if(!j.isQuietingDown()) {
-
     j.setNumExecutors(8)
-
+    j.getDescriptor("jenkins.CLI").get().setEnabled(false)
+    j.getInjector().getInstance(AdminWhitelistRule.class).setMasterKillSwitch(false)
 
     Set<String> agentProtocolsList = ['JNLP4-connect', 'Ping']
     if(!j.getAgentProtocols().equals(agentProtocolsList)) {

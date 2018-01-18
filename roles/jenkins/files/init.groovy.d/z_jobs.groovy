@@ -1,6 +1,9 @@
 import javaposse.jobdsl.dsl.DslScriptLoader
 import javaposse.jobdsl.plugin.JenkinsJobManagement
+import jenkins.model.Jenkins
 
+
+if(!Jenkins.instance.isQuietingDown()) {
 def jobDslScript = new File('jobs.groovy')
 def workspace = new File('.')
 
@@ -34,3 +37,5 @@ organizationFolder("github-wouterhummelink") {
       } 
     }
 }""")
+
+}
