@@ -50,8 +50,8 @@
 
 - name: debug hosts
   debug: 
-    msg: "{{ item }}"
-  with_items: "{{ groups['all'] }}"
+    var: groups
+  
 
 # tasks file for jenkins
 - name: create yum repo
