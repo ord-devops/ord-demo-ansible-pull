@@ -1,5 +1,7 @@
 ---
 # handlers file for kubeadm
+- name: reload systemd
+  command: systemctl daemon-reload
 - name: restart kubelet
   systemd:
     name: kubelet

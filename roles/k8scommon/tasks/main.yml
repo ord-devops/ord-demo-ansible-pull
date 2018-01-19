@@ -89,4 +89,8 @@
         content: |
           [Service]
           Environment="KUBELET_DNS_ARGS=--cluster-dns=10.254.0.10 --cluster-domain=cluster.local"
-      notify: restart kubelet
+          Environment="KUBELET_EXTRA_ARGS=--cloud-provider=aws"
+      notify: 
+        - reload systemd
+        - restart kubelet
+
