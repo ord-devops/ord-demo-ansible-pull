@@ -90,7 +90,7 @@
           [Service]
           Environment="KUBELET_DNS_ARGS=--cluster-dns=10.254.0.10 --cluster-domain=cluster.local"
           Environment="KUBELET_EXTRA_ARGS=--cloud-provider=aws"
-      notify: 
+      notify:
         - reload systemd
         - restart kubelet
 
