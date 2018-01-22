@@ -42,7 +42,7 @@ volumes.add(new HostPathVolume ('/var/run/docker.sock', '/var/run/docker.sock'))
 p = new PodTemplate('docker','docker', volumes )
 p.setName('docker')
 p.setLabel('docker')
-p.setRemoteFs('/home/jenkins')
+p.setRemoteFs('/tmp')
 
 def containerTemplate = p.getFirstContainer()
 if (containerTemplate != null) {
