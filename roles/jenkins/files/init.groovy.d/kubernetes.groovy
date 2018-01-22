@@ -48,7 +48,6 @@ def containerTemplate = p.getFirstContainer().get()
 if (containerTemplate != null) {
   containerTemplate.setTtyEnabled(true)
 } 
-setTtyEnabled
 k.addTemplate(p)
 
 j.clouds.replace(k)
