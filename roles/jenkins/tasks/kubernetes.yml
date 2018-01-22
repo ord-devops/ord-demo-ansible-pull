@@ -64,3 +64,11 @@
   command: kubectl create clusterrolebinding jenkins-default-admin --user jenkins --namespace default --clusterrole admin
   when: crb_jenkins.rc > 0
   delegate_to: "{{ groups['k8smaster'][0] }}"
+
+- name: generate kubeconfig
+  import_tasks: kubeconfig.yml
+  vars:
+    k8s_masterIp: "{{ groups['masters'][0] }}"
+    k8s_masterPort: 6443
+    kubeconfig: /etc/kubernetes/pki/jenkins.kubeconfig
+    user: jenkins
