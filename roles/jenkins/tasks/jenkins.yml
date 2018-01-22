@@ -82,6 +82,21 @@
   command: systemctl daemon-reload
   when: reload_jenkins.changed
 
+- name: create kubeconfig dir
+  file:
+    path: /var/lib/jenkins/.kube
+    owner: jenkins
+    group: jenkins
+    state: directory
+
+- name: write kubeconfig on jenkins
+  copy:
+    dest: /var/lib/jenkins/.kube/config
+    content: '{{ kubeconfig_content.content | b64decode }}'
+    owner: jenkins
+    group: jenkins
+    mode: 0600
+
 - name: install kubectl
   get_url:
     url: https://storage.googleapis.com/kubernetes-release/release/v1.9.1/bin/linux/amd64/kubectl
