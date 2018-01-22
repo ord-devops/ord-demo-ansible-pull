@@ -44,11 +44,11 @@ p.setName('docker')
 p.setLabel('docker')
 p.setRemoteFs('/tmp')
 
-def containerTemplate = p.getFirstContainer()
+def containerTemplate = p.getFirstContainer().get()
 if (containerTemplate != null) {
   containerTemplate.setTtyEnabled(true)
-}
-
+} 
+setTtyEnabled
 k.addTemplate(p)
 
 j.clouds.replace(k)
