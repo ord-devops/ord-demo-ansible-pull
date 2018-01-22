@@ -21,14 +21,14 @@ k.setServerCertificate(new File('/var/lib/jenkins/kubernetes-ca.crt').text)
 k.setSkipTlsVerify(false)
 k.setCredentialsId('kubernetes-certkey')
 
-def p = new PodTemplate('centos:6', Collections.emptyList())
+def p = new PodTemplate("centos6",'centos:6', Collections.emptyList())
 p.setName('centos6')
 p.setLabel('centos6-docker')
 p.setRemoteFs('/home/jenkins')
 
 k.addTemplate(p)
 
-p = new PodTemplate('centos:7', Collections.emptyList())
+p = new PodTemplate("centos7",'centos:7', Collections.emptyList())
 p.setName('centos7')
 p.setLabel('centos7-docker')
 p.setRemoteFs('/home/jenkins')
