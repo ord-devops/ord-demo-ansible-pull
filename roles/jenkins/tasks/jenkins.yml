@@ -82,6 +82,14 @@
   command: systemctl daemon-reload
   when: reload_jenkins.changed
 
+- name: install kubectl
+  get_url:
+    url: curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.9.1/bin/linux/amd64/kubectl
+    dest: /usr/local/bin/kubectl
+    mode: 0755
+    owner: root
+    group: root
+
 # Init.groovy.d
 - name: copy init.groovy.d scripts
   copy:
