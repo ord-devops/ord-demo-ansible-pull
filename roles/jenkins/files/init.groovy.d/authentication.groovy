@@ -13,7 +13,7 @@ def instance = Jenkins.getInstance()
 def hudsonRealm = new HudsonPrivateSecurityRealm(false)
 hudsonRealm.createAccount("admin","admin-123")
 instance.setSecurityRealm(hudsonRealm)
-
+instance.setLabelString('master')
 
 instance.save()
 
