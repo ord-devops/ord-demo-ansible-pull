@@ -58,7 +58,7 @@
 - name: copy ingress controller yaml
   copy:
     src: ingress
-    dest: /root/ingress
+    dest: /root/
 
 - name: deploy ingress
   shell: kubectl apply -f /root/ingress/{{ item }}
