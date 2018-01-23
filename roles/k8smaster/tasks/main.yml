@@ -1,4 +1,5 @@
 ---
+# yamllint disable rule:line-length
 - name: generate token
   command: kubeadm token generate
   register: kube_token_generate
@@ -7,12 +8,21 @@
   set_fact:
     kubeadm_token: "{{ kube_token_generate.stdout }}"
 
+- name: write kubeadm config
+  copy:
+    dest: /root/kubeadm.conf
+    content: |
+      kind: MasterConfiguration
+      apiVersion: kubeadm.k8s.io/v1alpha1
+      cloudProvider: aws
+
 - name: perform kubeadm init
   command: kubeadm init \
              --token={{ kubeadm_token }}
              --apiserver-advertise-address={{ k8sMasterAddress }}
              --pod-network-cidr={{ k8s_podCidr }}
              --service-cidr={{ k8s_serviceCidr }}
+             --config=/root/kubeadm.conf
   args:
     creates: /etc/kubernetes/admin.conf
   register: kubeadm_init
@@ -43,3 +53,23 @@
 
 - name: add pod network
   shell: kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')&env.IPALLOC_RANGE={{ k8s_podCidr }}"
+
+- name: copy ingress controller yaml
+  copy:
+    src: ingress
+    dest: /root/ingress
+
+- name: deploy ingress
+  shell: kubectl apply -f /root/ingress/{{ item }}
+  with_items:
+    - namespace.yaml
+    - default-backend.yaml
+    - configmap.yaml
+    - tcp-services-configmap.yaml
+    - udp-services-configmap.yaml
+    - rbac.yaml
+    - with-rbac.yaml
+    - service-l4.yaml
+
+- name: patch configmap
+  shell: kubectl patch -f /root/ingress/patch-configmap-l4.yaml
