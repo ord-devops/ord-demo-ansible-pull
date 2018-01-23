@@ -15,14 +15,15 @@
       kind: MasterConfiguration
       apiVersion: kubeadm.k8s.io/v1alpha1
       cloudProvider: aws
+      api:
+        advertiseAddress: "{{ k8sMasterAddress }}"
+      networking:
+        serviceSubnet: "{{ k8s_serviceCidr }}"
+        podSubnet: "{{ k8s_podCidr }}"
+      token: "{{ kubeadm_token }}"
 
 - name: perform kubeadm init
-  command: kubeadm init \
-             --token={{ kubeadm_token }}
-             --apiserver-advertise-address={{ k8sMasterAddress }}
-             --pod-network-cidr={{ k8s_podCidr }}
-             --service-cidr={{ k8s_serviceCidr }}
-             --config=/root/kubeadm.conf
+  command: kubeadm init --config=/root/kubeadm.conf
   args:
     creates: /etc/kubernetes/admin.conf
   register: kubeadm_init
