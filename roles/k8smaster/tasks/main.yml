@@ -71,6 +71,4 @@
     - rbac.yaml
     - with-rbac.yaml
     - service-l4.yaml
-
-- name: patch configmap
-  shell: kubectl patch -f /root/ingress/patch-configmap-l4.yaml
+    - patch-configmap-l4.yaml
